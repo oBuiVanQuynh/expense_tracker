@@ -8,12 +8,17 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   options: { value: string; label: string }[];
 }
 
+const fieldBase =
+  'w-full h-10 rounded-lg border px-3 text-sm bg-white transition-colors ' +
+  'focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 ' +
+  'disabled:bg-[var(--color-bg)] disabled:cursor-not-allowed';
+
 export function Select({ label, error, id, options, className = '', ...props }: SelectProps) {
   const selectId = id ?? label;
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label htmlFor={selectId} className="text-sm font-medium text-gray-700">
+        <label htmlFor={selectId} className="text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
           {label}
         </label>
       )}
@@ -21,10 +26,8 @@ export function Select({ label, error, id, options, className = '', ...props }: 
         id={selectId}
         {...props}
         className={[
-          'rounded-md border px-3 py-2 text-sm shadow-sm bg-white',
-          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
-          'disabled:bg-gray-100 disabled:cursor-not-allowed',
-          error ? 'border-red-400' : 'border-gray-300',
+          fieldBase,
+          error ? 'border-red-400 focus:ring-red-400' : 'border-[var(--color-border)]',
           className,
         ]
           .filter(Boolean)
@@ -36,7 +39,7 @@ export function Select({ label, error, id, options, className = '', ...props }: 
           </option>
         ))}
       </select>
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-500 mt-0.5">{error}</p>}
     </div>
   );
 }

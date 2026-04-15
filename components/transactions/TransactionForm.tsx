@@ -59,31 +59,24 @@ export function TransactionForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {/* Type toggle */}
-      <div className="flex rounded-md overflow-hidden border border-gray-300">
-        <button
-          type="button"
-          onClick={() => setType('expense')}
-          className={[
-            'flex-1 py-2 text-sm font-medium transition-colors',
-            type === 'expense'
-              ? 'bg-red-500 text-white'
-              : 'bg-white text-gray-600 hover:bg-gray-50',
-          ].join(' ')}
-        >
-          Chi tiêu
-        </button>
-        <button
-          type="button"
-          onClick={() => setType('income')}
-          className={[
-            'flex-1 py-2 text-sm font-medium transition-colors',
-            type === 'income'
-              ? 'bg-green-500 text-white'
-              : 'bg-white text-gray-600 hover:bg-gray-50',
-          ].join(' ')}
-        >
-          Thu nhập
-        </button>
+      <div className="flex p-1 rounded-xl gap-1" style={{ background: 'var(--color-border)' }}>
+        {([ ['expense', 'Chi tiêu', '#dc2626'], ['income', 'Thu nhập', '#16a34a'] ] as const).map(
+          ([val, label, color]) => (
+            <button
+              key={val}
+              type="button"
+              onClick={() => setType(val)}
+              className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
+              style={
+                type === val
+                  ? { background: color, color: 'white', boxShadow: 'var(--shadow-sm)' }
+                  : { color: 'var(--color-muted)' }
+              }
+            >
+              {label}
+            </button>
+          ),
+        )}
       </div>
 
       <Input
@@ -117,7 +110,7 @@ export function TransactionForm({
       />
 
       <Input
-        label="Ghi chú (tùy chọn)"
+        label="Ghi chú (tuỳ chọn)"
         type="text"
         value={note}
         onChange={(e) => setNote(e.target.value)}
@@ -125,11 +118,11 @@ export function TransactionForm({
         maxLength={200}
       />
 
-      <div className="flex gap-2 justify-end pt-2">
+      <div className="flex gap-2 justify-end pt-1">
         <Button type="button" variant="secondary" onClick={onCancel}>
           Hủy
         </Button>
-        <Button type="submit">Lưu</Button>
+        <Button type="submit">Lưu giao dịch</Button>
       </div>
     </form>
   );

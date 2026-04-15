@@ -42,9 +42,14 @@ export default function TransactionsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-gray-900">Giao dịch</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--color-text)]">Giao dịch</h1>
+          <p className="text-sm text-[var(--color-muted)] mt-0.5">
+            {transactions.length} giao dịch
+          </p>
+        </div>
         <Button onClick={() => setIsFormOpen(true)}>+ Thêm giao dịch</Button>
       </div>
 
@@ -55,7 +60,10 @@ export default function TransactionsPage() {
         onExport={handleExport}
       />
 
-      <div className="bg-white rounded-lg border border-gray-200 px-4">
+      <div
+        className="bg-white rounded-2xl px-4"
+        style={{ boxShadow: 'var(--shadow-sm)', border: '1px solid var(--color-border)' }}
+      >
         <TransactionList
           transactions={transactions}
           categories={categories}

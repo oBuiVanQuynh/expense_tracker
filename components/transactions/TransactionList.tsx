@@ -2,7 +2,6 @@
 
 import type { Transaction, Category } from '../../lib/types';
 import { formatVND } from '../../lib/utils/currency';
-import { Button } from '../ui/Button';
 
 export interface TransactionListProps {
   transactions: Transaction[];
@@ -21,57 +20,69 @@ export function TransactionList({
 
   if (transactions.length === 0) {
     return (
-      <p className="text-center text-gray-400 py-12 text-sm">Chưa có giao dịch nào.</p>
+      <div className="flex flex-col items-center py-16 gap-2">
+        <span className="text-4xl">🧾</span>
+        <p className="text-sm text-[var(--color-muted)]">Chưa có giao dịch nào.</p>
+      </div>
     );
   }
 
   return (
-    <ul className="divide-y divide-gray-100">
-      {transactions.map((t) => (
-        <li key={t.id} className="flex items-center justify-between py-3 gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <span
-              className={[
-                'text-lg leading-none',
-                t.type === 'income' ? 'text-green-500' : 'text-red-500',
-              ].join(' ')}
-            >
-              {t.type === 'income' ? '↑' : '↓'}
-            </span>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">
-                {categoryMap.get(t.categoryId) ?? 'Không rõ'}
-              </p>
-              {t.note && (
-                <p className="text-xs text-gray-400 truncate">{t.note}</p>
-              )}
-              <p className="text-xs text-gray-400">{t.date}</p>
+    <ul className="divide-y divide-[var(--color-border)]">
+      {transactions.map((t) => {
+        const isIncome = t.type === 'income';
+        const amountColor = isIncome ? 'var(--color-income)' : 'var(--color-expense)';
+        const iconBg = isIncome ? '#dcfce7' : '#fee2e2';
+        const iconColor = isIncome ? '#16a34a' : '#dc2626';
+
+        return (
+          <li
+            key={t.id}
+            className="flex items-center justify-between py-3.5 gap-3 group hover:bg-[var(--color-bg)] -mx-4 px-4 rounded-xl transition-colors"
+          >
+            {/* Left */}
+            <div className="flex items-center gap-3 min-w-0">
+              <span
+                className="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center font-bold text-sm"
+                style={{ background: iconBg, color: iconColor }}
+              >
+                {isIncome ? '↑' : '↓'}
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[var(--color-text)] truncate">
+                  {categoryMap.get(t.categoryId) ?? 'Không rõ'}
+                </p>
+                {t.note && (
+                  <p className="text-xs text-[var(--color-muted)] truncate">{t.note}</p>
+                )}
+                <p className="text-xs text-[var(--color-muted)]">{t.date}</p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <span
-              className={[
-                'text-sm font-semibold',
-                t.type === 'income' ? 'text-green-600' : 'text-red-600',
-              ].join(' ')}
-            >
-              {t.type === 'income' ? '+' : '-'}
-              {formatVND(t.amount)}
-            </span>
-            <Button variant="ghost" size="sm" onClick={() => onEdit(t)}>
-              Sửa
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-red-500 hover:text-red-700"
-              onClick={() => onDelete(t.id)}
-            >
-              Xoá
-            </Button>
-          </div>
-        </li>
-      ))}
+
+            {/* Right */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="text-sm font-bold" style={{ color: amountColor }}>
+                {isIncome ? '+' : '-'}{formatVND(t.amount)}
+              </span>
+              {/* Action buttons — show on hover */}
+              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={() => onEdit(t)}
+                  className="text-xs px-2 py-1 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-muted)] hover:text-indigo-600 hover:border-indigo-300 transition-colors"
+                >
+                  Sửa
+                </button>
+                <button
+                  onClick={() => onDelete(t.id)}
+                  className="text-xs px-2 py-1 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-muted)] hover:text-red-600 hover:border-red-300 transition-colors"
+                >
+                  Xoá
+                </button>
+              </div>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 }

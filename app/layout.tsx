@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { SeedLoader } from '../components/dev/SeedLoader';
+import { NavBar } from '../components/NavBar';
+
+const isDev = process.env.NODE_ENV !== 'production';
 
 export const metadata: Metadata = {
   title: 'Theo Dõi Chi Tiêu',
@@ -13,23 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" className="h-full">
-      <body className="min-h-full flex flex-col bg-gray-50 text-gray-900 antialiased">
-        <header className="bg-white border-b border-gray-200">
-          <nav className="max-w-4xl mx-auto px-4 h-14 flex items-center gap-6">
-            <span className="font-semibold text-lg">💰 Chi Tiêu</span>
-            <a href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">
-              Tổng quan
-            </a>
-            <a href="/transactions" className="text-sm text-gray-600 hover:text-gray-900">
-              Giao dịch
-            </a>
-            <a href="/categories" className="text-sm text-gray-600 hover:text-gray-900">
-              Danh mục
-            </a>
-          </nav>
-        </header>
-        <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">{children}</main>
+      <body className="min-h-full flex flex-col">
+        <NavBar />
+        <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-7">
+          {children}
+        </main>
+        {isDev && <SeedLoader />}
       </body>
     </html>
   );
 }
+

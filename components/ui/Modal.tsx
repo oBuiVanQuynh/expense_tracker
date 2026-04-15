@@ -13,9 +13,7 @@ export interface ModalProps {
 export function Modal({ isOpen, onClose, title, children }: ModalProps) {
   useEffect(() => {
     if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [isOpen, onClose]);
@@ -24,22 +22,26 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
+      style={{ background: 'rgba(15,15,30,0.45)', backdropFilter: 'blur(6px)' }}
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 p-6"
+        className="bg-white rounded-2xl w-full max-w-md p-6 animate-[slideUp_.22s_ease-out]"
+        style={{ boxShadow: 'var(--shadow-lg)' }}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
-        <div className="flex items-center justify-between mb-4">
-          <h2 id="modal-title" className="text-lg font-semibold text-gray-900">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
+          <h2 id="modal-title" className="text-base font-bold text-[var(--color-text)]">
             {title}
           </h2>
-          <Button variant="ghost" size="sm" onClick={onClose} aria-label="Đóng">
-            ✕
+          <Button variant="ghost" size="sm" onClick={onClose} aria-label="Đóng"
+            className="w-7 h-7 !p-0 rounded-full text-lg leading-none">
+            ×
           </Button>
         </div>
         {children}
